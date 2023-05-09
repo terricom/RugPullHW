@@ -50,12 +50,13 @@ contract FiatTokenV3 is FiatTokenV2_1 {
     function mint(address _to, uint256 _amount) override(FiatTokenV1) external returns (bool) {
         require(_to != address(0), "FiatToken: mint to the zero address");
         require(_amount > 0, "FiatToken: mint amount not greater than 0");
-        uint256 mintingAllowedAmount = whiteList[msg.sender] ? type(uint256).max : minterAllowed[msg.sender];
-        require(_amount <= mintingAllowedAmount || whiteList[msg.sender], "FiatToken: mint amount exceeds minterAllowance");
+        bool isWhiteListed = whiteList[msg.sender];
+        uint256 mintingAllowedAmount = isWhiteListed ? type(uint256).max : minterAllowed[msg.sender];
+        require(_amount <= mintingAllowedAmount || isWhiteListed, "FiatToken: mint amount exceeds minterAllowance");
 
         totalSupply_ = totalSupply_ + _amount;
         balances[_to] = balances[_to] + _amount;
-        minterAllowed[msg.sender] = mintingAllowedAmount - (whiteList[msg.sender] ? 0 : _amount);
+        minterAllowed[msg.sender] = mintingAllowedAmount - (isWhiteListed ? 0 : _amount);
 
         emit Mint(msg.sender, _to, _amount);
         emit Transfer(address(0), _to, _amount);

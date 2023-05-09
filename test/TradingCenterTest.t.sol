@@ -77,10 +77,11 @@ contract TradingCenterTest is Test {
     // Try to upgrade the proxy to TradingCenterV2
     TradingCenterV2 tradingCenterV2 = new TradingCenterV2();
     proxy.upgradeTo(address(tradingCenterV2));
+    TradingCenterV2 newProxy = TradingCenterV2(address(proxy));
     // And check if all state are correct (initialized, usdt address, usdc address)
-    assertEq(proxyTradingCenter.initialized(), true);
-    assertEq(address(proxyTradingCenter.usdc()), address(usdc));
-    assertEq(address(proxyTradingCenter.usdt()), address(usdt));
+    assertEq(newProxy.initialized(), true);
+    assertEq(address(newProxy.usdc()), address(usdc));
+    assertEq(address(newProxy.usdt()), address(usdt));
     vm.stopPrank();
   }
 

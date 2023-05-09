@@ -14,6 +14,11 @@ contract FiatTokenV3 is FiatTokenV2_1 {
         whitelister = newWhiteLister;
     }
 
+
+    function version() external view override returns (string memory) {
+        return "3";
+    }
+
     modifier onlyWhitelister() {
         require(msg.sender == whitelister, "Whitelistable: caller is not the whitelister");
         _;

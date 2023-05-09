@@ -31,6 +31,9 @@ contract FiatTokenTest is Test {
         vm.stopPrank();
 
         vm.startPrank(owner);
+        // 確認升級成功
+        assertEq(fiatTokenProxy.version(), fiatTokenV3.version());
+
         fiatTokenProxy.initializeV3(owner);
         // 白名單
         fiatTokenProxy.whitelist(owner);
